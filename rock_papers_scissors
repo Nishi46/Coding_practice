@@ -1,0 +1,31 @@
+
+
+
+
+print("\n              S T O N E     P A P E R     S C I S S O R     G A M E\n") 
+
+while True:
+  
+# Rules of the game   
+    print("""Enter your choice : 
+    a. Press '1' to select 'Stone'. 
+    b. Press '2' to select 'Paper'.
+    c. Press '3' to select 'Scissor'.\n""") 
+
+# Take input from user 
+    user_choice = int(input("Enter YOUR choice: ")) 
+  
+# If user enters values other than 1,2 or 3
+    while user_choice > 3 or user_choice < 1: 
+        user_choice = int(input("Enter valid input: ")) 
+      
+# Assigning numbers to the user's choices
+    if user_choice == 1: 
+        choice_name = 'Stone'
+    elif user_choice == 2: 
+        choice_name = 'Paper'
+    else: 
+        choice_name = 'Scissor'
+ 
+    print("YOUR choice is: ",choice_name) 
+    print("\nNow, its COMPUTER'S turn.......") 

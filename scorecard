@@ -1,0 +1,187 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Jul 24 11:31:36 2020
+
+@author: nishi
+"""
+
+
+import sys
+import time
+from termcolor import colored, cprint
+import os
+global round_num,scoring_start
+round_num=1
+scoring_start=0
+global limit
+global num_players
+num_players=0
+global players_alive
+players_alive=[]
+global show_scores
+
+global response
+
+
+
+class player:
+    
+    def __init__(self,n):
+        self.points=0
+        self.name=n
+    def update_score(self,p):
+        self.points=self.points+p
+    def display(self):
+        print("\t\t"+self.name+" "+str(self.points))
+
+def get_players(start,numplayersset):
+    global num_players, show_scores
+    
+    if numplayersset==0:
+        oops=1
+        while oops==1:
+            try:
+                oops = 0 
+                num_players=int(input("Number of players :"))
+            except ValueError:
+                oops=1
+                print("Ooops not a number !!")        
+    os.system("clear")
+    sc = 1
+    while sc == 1:
+        response = input("Show scores : y/N")
+        if response == "y":
+             show_scores = True 
+             sc = 0
+        else:
+             show_scores = False
+             sc = 0       
+    os.system("clear") 
+    for i in range(start,num_players):
+        print("Name of player number "+str(i+1))
+        p=player(input())
+        #print(p)
+        os.system("clear")
+        players_alive.append(p)
+        #print(p)
+        
+
+def get_scores(start):
+    global scoring_start
+    #global show_scores
+    
+    
+    for p in players_alive[start:]:
+        #print(p)
+        scoring_start=players_alive.index(p)
+        oops=1
+        while oops==1:
+            oops=0
+            try:
+                p.update_score(int(input(p.name+" :")))
+            except ValueError:
+                print(" not a number")
+                oops=1
+        if show_scores == True:
+            print("*******************************************************")
+            print("======================SCORE============================")
+            for p in players_alive:
+                print(p.name,p.points)
+            print("*******************************************************")
+
+def check_alive():
+    for p in players_alive:
+        #print (p)
+        if p.points>=limit:
+            print("*******************************************************")
+            print("\t\t"+p.name+" is OUT in round "  + str(round_num) + " !!")
+            print("*******************************************************")
+            print
+            players_alive.remove(p)
+            check_alive()
+        
+def show_scores():
+    print("*******************************************************")
+    print("======================SCORE============================")
+    for p in players_alive:
+        print(p.name,p.points)
+    print("*******************************************************")
+    
+#os.system("clear")
+print("*******************************************************")
+
+def save_game(filename):
+    f=open(filename,'w')
+    f.write(str(limit)+'\n')
+    f.write(str(round_num - 1)+'\n')
+    f.write(str(num_players)+'\n')
+    for p in players_alive:
+        f.write(p.name+'\n')
+        f.write(str(p.points)+'\n')
+    f.close()
+
+     
+def play():
+    global limit,players_alive,round_num,show_scores100
+    
+    ooops=1
+    while ooops==1:
+        try:
+            ooops=0
+            limit=int(input("Enter Limit :"))
+        except ValueError:
+            ooops=1
+            print("Ooops not a number")
+    os.system("clear")
+    get_players(0,0)
+    
+    while len(players_alive)>1:
+            print("\t\tRound number "+str(round_num)+"\n")
+            print("Enter the scores:\n") 
+            get_scores(0)
+            #show_scores()
+            os.system("clear")
+
+            check_alive()
+            round_num=round_num+1
+                    
+    for p in players_alive:
+            cprint("\n\n*******************************************************","blue")
+            def blink_once():
+    
+    #sys.stdout.write('\rTEXT')
+                cprint('\r******************* WINNER ******************************',"red",end="")
+                time.sleep(0.8)
+
+   # text1 = colored("       ","red")
+    #sys.stdout.write('\r        ')
+                print('\r       ',end=""),
+                time.sleep(0.8)
+            def blink(number):
+                for x in range(0,number):
+                    blink_once()
+            blink(3)
+            cprint("\t\t\n"+p.name+" in round " + str(round_num-1)+ "!!                         ","cyan") 
+            cprint("*******************************************************\n\n","blue")
+          
+                
+                
+
+                
+if __name__=='__main__':
+    try:
+        play()
+        print("Save game? y/n) : ")
+        if(input()=='y'):
+            try:
+                save_game(input("Save as :"))
+            except:
+                print("Nothing to save. Aborting...")
+        else:
+            print("Bye...")
+    except KeyboardInterrupt:
+        print("bye")
+            
+            
+    
